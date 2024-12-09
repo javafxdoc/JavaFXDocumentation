@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Question1Controller">
+    <FlowPane>
+        <Label text="Physique:" />
+        <TextField fx:id="physiqueField" promptText="0.0" />
+    </FlowPane>
+    <FlowPane>
+        <Label text="Chimie:" />
+        <TextField fx:id="chimieField" promptText="0.0" />
+    </FlowPane>
+    <FlowPane>
+        <Label text="Math:" />
+        <TextField fx:id="mathField" promptText="0.0" />
+    </FlowPane>
+    <FlowPane>
+        <Label text="Science:" />
+        <TextField fx:id="scienceField" promptText="0.0" />
+    </FlowPane>
+    <FlowPane>
+        <Label text="Informatique:" />
+        <TextField fx:id="informatiqueField" promptText="0.0" />
+    </FlowPane>
+    <FlowPane>
+        <Label text="Moyenne:" />
+        <TextField fx:id="averageField" promptText="0.0" editable="false" />
+    </FlowPane>
+    <FlowPane>
+        <Button text="Calculer" onAction="#calculateAverage" />
+        <Button text="Effacer" onAction="#clearFields" />
+        <Button text="Graphe" onAction="#showGraph" />
+    </FlowPane>
+</VBox>
+
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.chart.PieChart;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+
+public class Question1Controller {
+
+    @FXML
+    private TextField physiqueField;
+    @FXML
+    private TextField chimieField;
+    @FXML
+    private TextField mathField;
+    @FXML
+    private TextField scienceField;
+    @FXML
+    private TextField informatiqueField;
+    @FXML
+    private TextField averageField;
+
+    @FXML
+    private void calculateAverage() {
+        try {
+            double physique = Double.parseDouble(physiqueField.getText());
+            double chimie = Double.parseDouble(chimieField.getText());
+            double math = Double.parseDouble(mathField.getText());
+            double science = Double.parseDouble(scienceField.getText());
+            double informatique = Double.parseDouble(informatiqueField.getText());
+
+            double average = (physique + chimie + math + science + informatique) / 5;
+            averageField.setText(String.format("%.2f", average));
+        } catch (NumberFormatException e) {
+            averageField.setText("Invalid Input");
+        }
+    }
+
+    @FXML
+    private void clearFields() {
+        physiqueField.clear();
+        chimieField.clear();
+        mathField.clear();
+        scienceField.clear();
+        informatiqueField.clear();
+        averageField.clear();
+    }
+
+    @FXML
+    private void showGraph() {
+        PieChart pieChart = new PieChart();
+        pieChart.getData().add(new PieChart.Data("Physique", Double.parseDouble(physiqueField.getText())));
+        pieChart.getData().add(new PieChart.Data("Chimie", Double.parseDouble(chimieField.getText())));
+        pieChart.getData().add(new PieChart.Data("Math", Double.parseDouble(mathField.getText())));
+        pieChart.getData().add(new PieChart.Data("Science", Double.parseDouble(scienceField.getText())));
+        pieChart.getData().add(new PieChart.Data("Informatique", Double.parseDouble(informatiqueField.getText())));
+
+        Stage graphStage = new Stage();
+        graphStage.setTitle("Graphe Moyenne");
+        graphStage.setScene(new Scene(pieChart, 500, 500));
+        graphStage.show();
+    }
+}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Question2Controller">
+    <Top>
+        <MenuBar>
+            <Menu text="Fichier">
+                <MenuItem text="Nouveau" onAction="#newCanvas" />
+                <MenuItem text="Quitter" onAction="#exitApp" />
+            </Menu>
+        </MenuBar>
+    </Top>
+    <Left>
+        <VBox spacing="10">
+            <Button text="Cercle" onAction="#drawCircle" />
+            <Button text="Rectangle" onAction="#drawRectangle" />
+            <Button text="Texte" onAction="#drawText" />
+            <ColorPicker fx:id="colorPicker" />
+        </VBox>
+    </Left>
+    <Center>
+        <Pane fx:id="drawingPane" style="-fx-border-color: black; -fx-border-width: 5;" prefWidth="450" prefHeight="300" />
+    </Center>
+</BorderPane>
+
+import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+public class Question2Controller {
+
+    @FXML
+    private Pane drawingPane;
+
+    @FXML
+    private ColorPicker colorPicker;
+
+    @FXML
+    private void drawCircle() {
+        Circle circle = new Circle(30, colorPicker.getValue());
+        circle.setCenterX(Math.random() * (drawingPane.getWidth() - 60) + 30);
+        circle.setCenterY(Math.random() * (drawingPane.getHeight() - 60) + 30);
+        drawingPane.getChildren().add(circle);
+    }
+
+    @FXML
+    private void drawRectangle() {
+        Rectangle rectangle = new Rectangle(40, 20, colorPicker.getValue());
+        rectangle.setX(Math.random() * (drawingPane.getWidth() - 40));
+        rectangle.setY(Math.random() * (drawingPane.getHeight() - 20));
+        drawingPane.getChildren().add(rectangle);
+    }
+
+    @FXML
+    private void drawText() {
+        Text text = new Text("C'est un clic!");
+        text.setFill(colorPicker.getValue());
+        text.setX(Math.random() * (drawingPane.getWidth() - 50));
+        text.setY(Math.random() * (drawingPane.getHeight() - 10));
+        drawingPane.getChildren().add(text);
+    }
+
+    @FXML
+    private void newCanvas() {
+        drawingPane.getChildren().clear();
+    }
+
+    @FXML
+    private void exitApp() {
+        Stage stage = (Stage) drawingPane.getScene().getWindow();
+        stage.close();
+    }
+}
+
